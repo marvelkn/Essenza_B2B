@@ -1,6 +1,6 @@
 # Essenza Lab — React Native B2B
 
-Scope: alat bantu klasifikasi label aroma **satu molekul**. Branch kerja `Yoga`; jangan mengubah atau push branch B2C `codex/essenza-b2c` tanpa instruksi Yoga.
+Scope: alat bantu klasifikasi label aroma **satu molekul**. Repo B2B ini berdiri sendiri dengan branch kerja `marvel`; jangan mengubah repo asal atau branch B2C tanpa instruksi pengguna.
 
 - Periksa branch, file, aset, dan status proyek sebelum mengubah desain atau perilaku. Jangan mengarang fakta, hasil tes, atau keputusan pengguna; bila pilihan penting masih ambigu, tanyakan.
 - Gunakan aset yang sudah dipilih Yoga. Jangan menggambar ulang atau mengganti aset tanpa permintaan.

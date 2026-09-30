@@ -4,13 +4,13 @@ Aplikasi React Native B2B untuk memprediksi label aroma **satu molekul**. Layar 
 
 Saat pertama dibuka, aplikasi menampilkan tutorial lima langkah dengan sorotan dan panah. Tutorial dapat diulang dari tab Panduan. Setiap prediksi yang berhasil otomatis dicatat di **Riwayat** (maksimal 100 hasil lokal); bila penyimpanan gagal, hasil tetap ditampilkan dengan tombol coba simpan lagi. **Koleksi** hanya berisi senyawa yang dipilih pengguna untuk disimpan (maksimal 200), lengkap dengan nama panggilan/catatan dan opsi analisis ulang. Layar Analisis tidak lagi menampilkan bagian Pilihan cepat di bawah formulir.
 
-Riset dan training tetap berada di repositori `Perfume-MultiLabel-Classifier`; kode di sini hanya untuk integrasi aplikasi. Backend riset tidak diubah. Versi B2C berada di branch terpisah `codex/essenza-b2c` dan tidak terpengaruh.
+Riset dan training tetap berada di repositori `Perfume-MultiLabel-Classifier`; kode di sini hanya untuk integrasi aplikasi. Backend riset tidak diubah. Versi B2C di repo asal tidak disalin ke repo B2B ini.
 
 ## Uji API lewat Vercel Hobby
 
-Entrypoint root `app.py` mengarah ke `feature_api.app:app`; `requirements.txt` root memakai paket yang sama dengan API lokal. Di Vercel, impor repo ini sebagai proyek **FastAPI** dengan Root Directory kosong dan Python 3.12. Tetapkan branch produksi ke `marvel` pada **Settings → Environments → Production → Branch Tracking**, karena Vercel biasanya memilih `main` secara default. Setelah deploy, pastikan `GET /health` mengembalikan `status: ok` beserta `feature_schema_id` yang cocok dengan manifest aplikasi. Isi alamat HTTPS dasar di **Panduan → Pengaturan koneksi**.
+Entrypoint root `app.py` mengarah ke `feature_api.app:app`; `requirements.txt` root memakai paket yang sama dengan API lokal. Proyek Vercel memakai repo `marvelkn/Essenza_B2B`, branch produksi `marvel`, Root Directory kosong, dan Python 3.12. API publik ada di `https://essenzafrontend.vercel.app`. Endpoint `GET /health`, `POST /resolve`, dan `POST /fingerprint` telah diuji dengan vanilin. APK release memakai URL ini secara otomatis; pengelola dapat mengganti dan mengecek alamatnya melalui **Panduan → Pengaturan koneksi**.
 
-Vercel Hobby hanya untuk demo pribadi/nonkomersial. API tetap memerlukan internet untuk pencarian senyawa di luar katalog dan APK release belum menyimpan URL publik bawaan sampai layanan live terverifikasi.
+Vercel Hobby hanya untuk demo pribadi/nonkomersial. API memerlukan internet untuk prediksi baru dan pencarian senyawa di luar katalog.
 
 ## Menjalankan di HP Android
 
@@ -43,7 +43,7 @@ cd android
 adb shell am start -n com.essenza.lab/com.essenza.app.MainActivity
 ```
 
-Pada tab **Panduan → Pengaturan koneksi** (bagian pengelola), alamat default debug ialah `http://127.0.0.1:8000`. Tekan **Simpan & tes koneksi**. Untuk pemakaian tanpa USB, host API di server HTTPS lalu isi alamat dasarnya di sana. Build release tidak memiliki alamat default: operator perlu mengisinya. Layanan API harus tetap tersedia untuk prediksi baru; ONNX dijalankan lokal setelah fitur diterima. Hosting API merupakan pekerjaan berikutnya dan belum dilakukan.
+Pada tab **Panduan → Pengaturan koneksi** (bagian pengelola), alamat default debug ialah `http://127.0.0.1:8000`; tekan **Simpan & tes koneksi** bila mengubahnya. Build release memakai `https://essenzafrontend.vercel.app` secara otomatis, termasuk pada instalasi lama yang hanya pernah menyimpan alamat debug localhost. Layanan API harus tersedia untuk prediksi baru; ONNX dijalankan lokal setelah fitur diterima.
 
 ## Membangun ulang katalog senyawa
 

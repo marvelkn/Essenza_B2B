@@ -1,7 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const KEY = '@essenza/b2b-feature-api-v1';
+const KEY = '@essenza/b2b-feature-api-v2';
+const LEGACY_KEY = '@essenza/b2b-feature-api-v1';
 const DEBUG_URL = 'http://127.0.0.1:8000';
+const RELEASE_URL = 'https://essenzafrontend.vercel.app';
 
 export function validateFeatureApiUrl(value) {
   const trimmed = value.trim().replace(/\/+$/, '');
@@ -27,7 +29,14 @@ export async function loadFeatureApiUrl() {
   if (stored) {
     return validateFeatureApiUrl(stored);
   }
-  return __DEV__ ? DEBUG_URL : null;
+  const legacy = await AsyncStorage.getItem(LEGACY_KEY);
+  if (legacy) {
+    const url = validateFeatureApiUrl(legacy);
+    if (__DEV__ || url !== DEBUG_URL) {
+      return url;
+    }
+  }
+  return __DEV__ ? DEBUG_URL : RELEASE_URL;
 }
 
 export async function saveFeatureApiUrl(value) {

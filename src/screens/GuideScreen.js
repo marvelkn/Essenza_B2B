@@ -122,8 +122,8 @@ export function GuideScreen() {
       </Pressable>
       {settingsOpen && <View style={s.card}>
         <Text style={s.body}>
-          Isi alamat layanan dari pengelola. Saat uji lewat USB, gunakan
-          localhost:8000 dan jalankan adb reverse untuk port 8000.
+          Aplikasi release memakai layanan online otomatis. Saat uji lewat USB,
+          gunakan localhost:8000 dan jalankan adb reverse untuk port 8000.
         </Text>
         <TextInput
           accessibilityLabel="Alamat layanan analisis"
