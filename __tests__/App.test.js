@@ -103,6 +103,8 @@ test('successful prediction enters history automatically without adding to Kolek
   expect(v7PredictionService.predict).not.toHaveBeenCalled();
   await showResult();
   expect(JSON.stringify(tree.toJSON())).toContain('HASIL PREDIKSI');
+  expect(JSON.stringify(tree.toJSON())).toContain('82%');
+  expect(JSON.stringify(tree.toJSON())).toContain('bukan seberapa kuat aromanya');
   expect(JSON.stringify(tree.toJSON())).toContain('Tercatat di Riwayat');
   expect(button('Coba simpan ke Riwayat')).toBeUndefined();
   const saved = JSON.parse(AsyncStorage.setItem.mock.calls

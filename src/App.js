@@ -3,7 +3,7 @@ import { Animated, Pressable, StatusBar, StyleSheet, View } from 'react-native';
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { AnalysisScreen } from './screens/AnalysisScreen';
 import { ResultScreen } from './screens/ResultScreen';
 import { HistoryScreen } from './screens/HistoryScreen';
@@ -75,6 +75,8 @@ const tabStyles = StyleSheet.create({
 });
 
 function Workspace() {
+  const { bottom } = useSafeAreaInsets();
+  const bottomSpace = Math.max(bottom, 12);
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -85,8 +87,8 @@ function Workspace() {
         tabBarStyle: {
           backgroundColor: colors.paper,
           borderTopColor: colors.line,
-          height: 64,
-          paddingBottom: 0,
+          height: 64 + bottomSpace,
+          paddingBottom: bottomSpace,
         },
         tabBarLabelStyle: {
           fontFamily: sans,

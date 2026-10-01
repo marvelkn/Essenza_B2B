@@ -11,6 +11,10 @@ import {
 } from '../ui/components';
 import { odorSymbol } from '../ui/odorSymbols';
 import { colors, s, sans } from '../ui/theme';
+
+const scorePercent = score =>
+  `${(score * 100).toFixed(1).replace(/\.0$/, '').replace('.', ',')}%`;
+
 export function ResultScreen({ route, navigation }) {
   const { result } = route.params;
   const lab = useLab();
@@ -90,7 +94,7 @@ export function ResultScreen({ route, navigation }) {
       </View>
       <Notice>{demo
         ? 'Halaman ini adalah data contoh lama, bukan hasil prediksi sungguhan.'
-        : 'Ini perkiraan profil aroma satu senyawa. Skor menunjukkan kecenderungan tiap aroma, bukan kekuatannya.'}
+        : 'Persentase menunjukkan seberapa yakin model bahwa label aroma ada pada senyawa ini, bukan seberapa kuat aromanya.'}
       </Notice>
       {!demo && saved && <Text style={styles.savedStatus}>✓ Tercatat di Riwayat</Text>}
       {!saved && saveError && <Notice error>Hasil belum masuk Riwayat: {saveError}</Notice>}
@@ -102,7 +106,7 @@ export function ResultScreen({ route, navigation }) {
         />
         <Text style={s.small}>
           {demo ? 'Skor contoh, diurutkan dari yang tertinggi.'
-            : 'Label dengan skor ≥ 0,5 ditampilkan lebih dulu. Setiap label dinilai sendiri.'}
+            : 'Label dengan skor ≥ 50% ditampilkan lebih dulu. Setiap label dinilai sendiri.'}
         </Text>
         {displayed.length ? (
           displayed.map((item, index) => (
@@ -110,7 +114,7 @@ export function ResultScreen({ route, navigation }) {
               key={item.label}
               style={styles.scoreRow}
               accessible
-              accessibilityLabel={`${item.label}, skor ${item.score.toFixed(2)}`}
+              accessibilityLabel={`${item.label}, skor model ${scorePercent(item.score)}`}
             >
               <View style={s.between}>
                 <View style={s.row}>
@@ -122,7 +126,7 @@ export function ResultScreen({ route, navigation }) {
                   <Text style={styles.aroma}>{item.label}</Text>
                 </View>
                 <Text style={styles.score}>
-                  {item.score.toFixed(2).replace('.', ',')}
+                  {scorePercent(item.score)}
                 </Text>
               </View>
               <View style={styles.track}>
@@ -147,7 +151,7 @@ export function ResultScreen({ route, navigation }) {
           <View style={styles.empty}>
             <Text style={s.heading}>Tidak ada label ditampilkan</Text>
             <Text style={s.body}>
-              Tidak ada skor yang melewati ambang 0,5. Ini tidak berarti molekul
+              Tidak ada skor yang mencapai 50%. Ini tidak berarti molekul
               pasti tidak beraroma.
             </Text>
           </View>
@@ -163,8 +167,9 @@ export function ResultScreen({ route, navigation }) {
         )}
         <View style={s.divider} />
         <Text style={s.small}>
-          Skor tiap label berdiri sendiri dan totalnya tidak harus 100%.
-          Skor bukan kekuatan aroma, komposisi campuran, atau jaminan ketepatan.
+          Persentase ini adalah skor model, bukan peluang pasti. Tiap label
+          dinilai sendiri sehingga totalnya tidak harus 100%. Tetap cek aroma
+          bahan secara langsung.
         </Text>
       </View>
       <View style={s.card}>

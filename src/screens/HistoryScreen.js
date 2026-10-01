@@ -97,7 +97,7 @@ export function HistoryScreen() {
                           </Text>
                         ))
                       ) : (
-                        <Text style={s.small}>{result.demo ? 'Contoh tanpa label' : 'Tidak ada label ≥ 0,5'}</Text>
+                        <Text style={s.small}>{result.demo ? 'Contoh tanpa label' : 'Tidak ada label ≥ 50%'}</Text>
                       )}
                     </View>
                     <Icon name="arrow" size={18} />

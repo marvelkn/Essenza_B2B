@@ -89,8 +89,9 @@ export function GuideScreen() {
       <View style={s.card}>
         <Text style={s.heading}>Cara membaca hasil</Text>
         <Text style={s.body}>
-          Satu senyawa bisa punya beberapa karakter aroma. Skor menunjukkan
-          seberapa kuat sistem memilih tiap label, bukan persentase isi bahan.
+          Satu senyawa bisa punya beberapa karakter aroma. Persentase adalah
+          skor model untuk kecocokan tiap label, bukan kekuatan bau atau kadar
+          bahan. Skor ini belum dikalibrasi sebagai peluang pasti.
         </Text>
         <Text style={s.body}>
           Hasil ini perkiraan awal. Bau nyata bisa berbeda dan tetap perlu dicek
