@@ -7,6 +7,10 @@ apply plugin: "com.facebook.react"
  * By default you don't need to apply any configuration, just uncomment the lines you need.
  */
 react {
+    // Metro cannot watch the root of a Windows subst drive.
+    if (providers.gradleProperty('essenzaProjectRoot').isPresent()) {
+        root = file(providers.gradleProperty('essenzaProjectRoot').get())
+    }
     /* Folders */
     //   The root of your project, i.e. where "package.json" lives. Default is '../..'
     // root = file("../../")
@@ -73,6 +77,7 @@ def enableProguardInReleaseBuilds = false
 def jscFlavor = 'io.github.react-native-community:jsc-android:2026004.+'
 
 android {
+    buildFeatures { buildConfig true }
     ndkVersion rootProject.ext.ndkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
@@ -82,8 +87,19 @@ android {
         applicationId "com.essenza.lab"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
+        // Bound native process concurrency on Windows development machines.
+        if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+            externalNativeBuild {
+                cmake {
+                    arguments "-DCMAKE_JOB_POOLS=essenza_compile=2;essenza_link=1",
+                        "-DCMAKE_JOB_POOL_COMPILE=essenza_compile",
+                        "-DCMAKE_JOB_POOL_LINK=essenza_link"
+                }
+            }
+        }
         versionCode 1
         versionName "1.0"
+        manifestPlaceholders = [usesCleartextTraffic: "true"]
     }
     signingConfigs {
         debug {
@@ -104,13 +120,17 @@ android {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
+        local {
+            initWith release
+            matchingFallbacks = ["release"]
+            debuggable false
+        }
     }
 }
 
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
-    implementation("com.microsoft.onnxruntime:onnxruntime-android:1.17.0")
 
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
@@ -119,41 +139,17 @@ dependencies {
     }
 }
 
-tasks.register("verifyV7Models") {
-    def manifestFile = file("../../src/assets/metadata/v7_model_manifest.json")
-    def modelsDir = file("src/main/assets/models/v7")
-    inputs.file(manifestFile)
-    inputs.dir(modelsDir)
-    doLast {
-        if (!manifestFile.isFile()) {
-            throw new GradleException("Missing v7 model manifest; run scripts/export-v7-onnx.py")
-        }
-        def manifest = new groovy.json.JsonSlurper().parse(manifestFile)
-        if (manifest.models.size() != 109) {
-            throw new GradleException("Expected 109 v7 ONNX models")
-        }
-        manifest.models.each { entry ->
-            if (!(entry.filename ==~ /lgbm_\d{3}\.onnx/)) {
-                throw new GradleException("Invalid v7 ONNX filename: ${entry.filename}")
-            }
-            def model = new File(modelsDir, entry.filename)
-            if (!model.isFile()) {
-                throw new GradleException("Missing ${model}; run scripts/export-v7-onnx.py")
-            }
-            def digest = java.security.MessageDigest.getInstance("SHA-256")
-            model.withInputStream { stream ->
-                byte[] buffer = new byte[65536]
-                int length
-                while ((length = stream.read(buffer)) != -1) {
-                    digest.update(buffer, 0, length)
-                }
-            }
-            def actual = digest.digest().encodeHex().toString()
-            if (actual != entry.sha256) {
-                throw new GradleException("Checksum mismatch for ${entry.filename}")
-            }
+// React Native computes CLI paths relative to root; keep Metro outputs on that drive too.
+afterEvaluate {
+    if (providers.gradleProperty("essenzaProjectRoot").isPresent()) {
+        def physicalBuildDir = new File(providers.gradleProperty("essenzaProjectRoot").get(), "android/app/build")
+        tasks.withType(com.facebook.react.tasks.BundleHermesCTask).configureEach {
+            def variant = name.substring("createBundle".length(), name.length() - "JsAndAssets".length())
+            variant = variant.substring(0, 1).toLowerCase() + variant.substring(1)
+            jsBundleDir.set(new File(physicalBuildDir, "generated/assets/react/${variant}"))
+            resourcesDir.set(new File(physicalBuildDir, "generated/res/react/${variant}"))
+            jsSourceMapsDir.set(new File(physicalBuildDir, "generated/sourcemaps/react/${variant}"))
+            jsIntermediateSourceMapsDir.set(new File(physicalBuildDir, "intermediates/sourcemaps/react/${variant}"))
         }
     }
 }
-
-tasks.named("preBuild").configure { dependsOn("verifyV7Models") }

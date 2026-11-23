@@ -1,79 +1,92 @@
-# Essenza Lab — analisis aroma senyawa untuk pengguna B2B
+# Essenza Lab — analisis aroma satu senyawa untuk B2B
 
-Aplikasi React Native B2B untuk memprediksi label aroma **satu molekul**. Layar utama menawarkan dua cara input: pilih dari katalog **6.686 senyawa bernama**, atau ketik nama/rumus kimia. Input bebas dicocokkan ke katalog terlebih dahulu, lalu PubChem bila belum ditemukan; pengguna wajib memilih struktur hasil pencarian sebelum prediksi. SMILES murni ada di input lanjutan. API Python/RDKit menghasilkan **2.048 bit Morgan Fingerprint + 8 deskriptor** sesuai skema eksperimen final v7. **109 model LightGBM D** yang diekspor ke ONNX berjalan di Android. Label muncul jika skor masing-masing mencapai **0,5**. Skor bukan persentase komposisi aroma. Istilah versi dan teknologi model tidak ditampilkan pada alur pengguna.
+Essenza membantu UMKM/peracik parfum mengeksplorasi **label aroma satu molekul**. Aplikasi Android menyediakan katalog **6.686 senyawa bernama**, pencarian nama/rumus dengan konfirmasi struktur, dan input SMILES lanjutan. **RDKit dan 109 model LightGBM D asli berjalan pada komputer lokal**; HP mengirim struktur dan menerima skor melalui API lokal lewat USB.
 
-Saat pertama dibuka, aplikasi menampilkan tutorial lima langkah dengan sorotan dan panah. Tutorial dapat diulang dari tab Panduan. Setiap prediksi yang berhasil otomatis dicatat di **Riwayat** (maksimal 100 hasil lokal); bila penyimpanan gagal, hasil tetap ditampilkan dengan tombol coba simpan lagi. **Koleksi** hanya berisi senyawa yang dipilih pengguna untuk disimpan (maksimal 200), lengkap dengan nama panggilan/catatan dan opsi analisis ulang. Layar Analisis tidak lagi menampilkan bagian Pilihan cepat di bawah formulir.
+```text
+Android: pilih satu struktur
+  -> USB / adb reverse
+  -> PC: FastAPI -> validasi RDKit -> 2.056 fitur -> LightGBM asli
+  -> Android: 109 skor -> label dengan skor >= 0,5 -> Riwayat otomatis
+```
 
-Riset dan training tetap berada di repositori `Perfume-MultiLabel-Classifier`; kode di sini hanya untuk integrasi aplikasi. Backend riset tidak diubah. Versi B2C di repo asal tidak disalin ke repo B2B ini.
+**Full local** berarti preprocessing dan inferensi berlangsung pada PC milik pengguna, tanpa hosting/cloud dan tanpa konversi ONNX. Komputer, API, dan sambungan USB tetap diperlukan untuk **prediksi baru**. Setelah dependency dan model tersedia, prediksi katalog/SMILES tidak memerlukan internet. PubChem hanya opsi tambahan untuk pencarian nama di luar katalog; mati secara default.
 
-## Uji API lewat Vercel Hobby
+## Jalankan dari awal
 
-Entrypoint root `app.py` mengarah ke `feature_api.app:app`; `requirements.txt` root memakai paket yang sama dengan API lokal. Proyek Vercel memakai repo `marvelkn/Essenza_B2B`, branch produksi `marvel`, Root Directory kosong, dan Python 3.12. API publik ada di `https://essenzafrontend.vercel.app`. Endpoint `GET /health`, `POST /resolve`, dan `POST /fingerprint` telah diuji dengan vanilin. APK release memakai URL ini secara otomatis; pengelola dapat mengganti dan mengecek alamatnya melalui **Panduan → Pengaturan koneksi**.
+Panduan lengkap: [LOCAL_DEVELOPMENT.md](docs/LOCAL_DEVELOPMENT.md).
 
-Vercel Hobby hanya untuk demo pribadi/nonkomersial. API memerlukan internet untuk prediksi baru dan pencarian senyawa di luar katalog.
+| Kebutuhan | Pengaturan |
+| --- | --- |
+| Node.js | >=22.11; dependency dipasang dengan `npm ci` |
+| Python | **3.12**, environment `.venv-feature-api` |
+| Android | JDK 17/21, Android SDK/ADB, USB debugging pada HP |
+| Model | Salinan **109 `.joblib` asli** dari frozen run final v7; tidak termasuk Git |
+| Alamat default | **`http://127.0.0.1:8000`** pada seluruh build |
 
-## Menjalankan di HP Android
-
-Persyaratan: Node.js >=22.11, JDK 17+, Android SDK/ADB, Python 3.12 dengan paket pada `feature_api/requirements.txt`, serta aset ONNX v7 di `android/app/src/main/assets/models/v7/`. Aset ONNX berukuran sekitar 152 MB, diabaikan Git, dan harus diekspor dari frozen run v7 sebelum build pada checkout baru. Manifest JSON yang cocok ada di `src/assets/metadata/v7_model_manifest.json`. Build akan gagal bila aset hilang atau checksum tidak cocok.
+Di terminal pertama:
 
 ```powershell
+Set-Location -LiteralPath 'C:\Users\ACER\Documents\Marvel\Skripsi\Project Skripsi\Essenza_Frontend'
 npm ci
-python -m pip install -r feature_api/requirements.txt
-python -m uvicorn feature_api.app:app --host 127.0.0.1 --port 8000
+.\scripts\start-local-api.ps1
 ```
 
-Jika shim `npm` pada PC ini menunjuk ke lokasi yang rusak, jalankan npm lewat `C:\Program Files\nodejs\node.exe` dengan argumen `C:\Program Files\nodejs\node_modules\npm\bin\npm-cli.js`. Untuk error panjang path Gradle di Windows, petakan root frontend ke drive pendek dengan `subst X: (Resolve-Path .).Path` lalu jalankan Gradle dari `X:\android`.
+Script API menyiapkan dependency, menyalin model jika belum tersedia, memverifikasi checksum, lalu menjalankan **`feature_api.app:app`**. Sumber model dideteksi dari repo penelitian di folder sebelah; gunakan `-SourceRun 'C:\path\ke\runs\perfume-five-grouped-v7-m2048-d8'` bila lokasinya berbeda. `-SetupOnly` menyiapkan dependency dan model tanpa menyalakan API. Setelah paket lokal lengkap, startup memakai paket tersebut tanpa perlu mengakses repo penelitian.
 
-Di terminal lain:
+Di terminal kedua, setelah HP mengizinkan USB debugging:
 
 ```powershell
-adb reverse tcp:8000 tcp:8000
-adb reverse tcp:8099 tcp:8099
-npm start -- --host 127.0.0.1 --port 8099
+Set-Location -LiteralPath 'C:\Users\ACER\Documents\Marvel\Skripsi\Project Skripsi\Essenza_Frontend'
+.\scripts\run-local-android.ps1
 ```
 
-Build dan pasang melalui terminal ketiga. Pada PC ini setel JDK Android Studio dan Android SDK dahulu:
+Script memeriksa kontrak `/health`, memasang aturan reverse, membangun dan memasang APK `local`, lalu membuka aplikasi. APK membawa bundle JavaScript sehingga **tidak membutuhkan Metro** saat digunakan. Lokasi APK: `android/app/build/outputs/apk/local/app-local.apk`. Windows memakai drive pendek `X:` untuk native build dan path fisik untuk bundling.
 
-```powershell
-$env:JAVA_HOME = 'C:\Program Files\Android\Android Studio\jbr'
-$env:ANDROID_HOME = 'C:\Users\ACER\AppData\Local\Android\Sdk'
-$env:Path = "$env:JAVA_HOME\bin;$env:ANDROID_HOME\platform-tools;$env:Path"
-cd android
-.\gradlew.bat :app:installDebug -PreactNativeDevServerPort=8099 -PreactNativeDevServerIp=localhost
-adb shell am start -n com.essenza.lab/com.essenza.app.MainActivity
-```
+Di HP, **Panduan → Pengaturan koneksi → Gunakan koneksi USB → Simpan & tes koneksi**. URL lokal disimpan di namespace tersendiri; alamat cloud dari build lama tidak dipakai. Untuk `-ApiUrl` khusus/LAN, script hanya memeriksa alamat tersebut pada PC; **atur URL yang sama secara manual pada HP**, karena opsi ini tidak menyuntikkan URL ke APK.
 
-Pada tab **Panduan → Pengaturan koneksi** (bagian pengelola), alamat default debug ialah `http://127.0.0.1:8000`; tekan **Simpan & tes koneksi** bila mengubahnya. Build release memakai `https://essenzafrontend.vercel.app` secara otomatis, termasuk pada instalasi lama yang hanya pernah menyimpan alamat debug localhost. Layanan API harus tersedia untuk prediksi baru; ONNX dijalankan lokal setelah fitur diterima.
+## Model dan kontrak aplikasi
 
-## Membangun ulang katalog senyawa
+| Komponen | Implementasi aktif |
+| --- | --- |
+| Model penelitian | **v7 LightGBM D**, 109 klasifikator biner asli |
+| Representasi | Morgan **2.048 bit**, radius **2**, tanpa chirality, ditambah **8 deskriptor RDKit** |
+| Input model | **2.056 fitur float32**, urutan sesuai manifest |
+| Pemuatan/inferensi | `joblib.load` sekali saat startup API; `predict_proba` kelas positif **1** |
+| Ambang label | **0,5**, tetap mengikuti model final |
+| Paket lokal | `feature_api/models/v7/label_000.joblib` s.d. `label_108.joblib` |
+| Manifest | `src/assets/metadata/v7_model_manifest.json` |
 
-Katalog dibekukan dalam `src/assets/catalog/compounds.json` agar pilihan nama tersedia tanpa pencarian eksternal. Generator membaca `records.csv` dan metadata sumber dari repo riset **secara read-only**, memeriksa checksum, lalu menggabungkan nama dengan SMILES kanonis. Angka 6.686 adalah ukuran katalog yang berasal dari dataset final, **bukan** batas semua struktur yang dapat diproses model. Input nama/rumus memakai `POST /resolve`; rumus seperti `C2H6O` dapat mengembalikan beberapa isomer. Sejumlah nama awam Indonesia dikurasi sebagai alias; nama yang belum dikenal mungkin perlu ejaan kimia/Inggris yang lebih spesifik. `Air` dan `CO2` dikenali tetapi tidak dikirim ke prediksi aroma. Nama di luar katalog membutuhkan akses internet dari server ke PubChem. Struktur lain dapat dicoba di mode SMILES lanjutan.
+`scripts/prepare-local-models.py` menyalin artefak secara identik dan memeriksa checksum terhadap sumber beku. Script tidak melakukan training atau menyimpan ulang objek model. Total berkas model asli sekitar **250,2 MB** (**250.210.606 byte**); model disimpan pada PC, bukan dalam APK. Runtime Python dipin sesuai lingkungan artefak asli, termasuk LightGBM, scikit-learn, joblib, NumPy, pandas, dan RDKit.
 
-```powershell
-python scripts/build-compound-catalog.py --backend-root 'C:\Users\ACER\Documents\Marvel\Skripsi\Project Skripsi\Perfume-MultiLabel-Classifier'
-```
+API aplikasi menyediakan:
 
-## Mengekspor ONNX dari run final
+| Endpoint | Kegunaan |
+| --- | --- |
+| `GET /health` | Status model siap, runtime, identitas bundle/skema, dimensi, dan kemampuan layanan |
+| `POST /resolve` | Kandidat struktur dari nama/rumus; pengguna harus memilih satu |
+| `POST /predict` | Validasi struktur, preprocessing, dan inferensi lokal; mengembalikan seluruh 109 skor |
+| `POST /fingerprint` | Diagnostik/checksum fitur; tidak digunakan frontend untuk inferensi |
 
-Exporter membaca `inference_bundle.json`, SHA-256 model asli, `features.npz`, dan `splits.json` dari run v7. Ia **tidak melatih ulang** model. Setiap model ONNX dibandingkan dengan prediksi model asli pada 32 vektor beku, termasuk keputusan ambang 0,5. Paket ekspor dipin pada `scripts/requirements-export.txt`.
+Frontend memeriksa runtime, identitas model/bundle/skema, dimensi, threshold, urutan label, dan skor sebelum membentuk hasil. Tidak ada vektor fitur atau proses inferensi model pada HP. [Alur teknis](docs/B2B_LAB.md) menjelaskan pemisahan tanggung jawab dan batasnya.
 
-```powershell
-$v7 = 'C:\Users\ACER\Documents\Marvel\Skripsi\Project Skripsi\Perfume-MultiLabel-Classifier\.local-tools\campus-transfer-full-20260909\perfume-campus-grouped-v7-m2048-d8\perfume-campus-grouped-v7-m2048-d8'
-python -m pip install -r scripts/requirements-export.txt
-python scripts/export-v7-onnx.py `
-  --run "$v7\runs\perfume-five-grouped-v7-m2048-d8" `
-  --features "$v7\data\builds\perfume-m2048-d8-v7\features.npz" `
-  --splits "$v7\data\builds\perfume-five-grouped-v2\splits.json"
-```
+## Fitur dan batas penggunaan
 
-Exporter menolak menimpa aset yang sudah ada. Bila melakukan ekspor ulang, simpan atau hapus hasil lama secara sengaja dahulu dan pastikan manifest baru ikut dibawa ke aplikasi serta API.
+- Setiap prediksi berhasil otomatis dicatat di **Riwayat** (maksimal 100 hasil lokal). Bila penyimpanan gagal, hasil tetap terlihat dan dapat dicoba simpan lagi.
+- **Koleksi** bersifat manual (maksimal 200 senyawa), dengan nama panggilan/catatan, edit, hapus, dan analisis ulang. Data lama dipertahankan saat memperbarui APK dengan identitas/tanda tangan yang cocok.
+- Tutorial lima langkah dapat diulang dari Panduan. Identitas B2B tetap **`com.essenza.lab`**; penyimpanan terpisah dari B2C. Tidak ada login atau database server.
+- Skor ditampilkan dalam persen, tetapi **belum merupakan probabilitas terkalibrasi**, serta bukan intensitas, kadar, komposisi, atau keamanan bahan. Skor tidak harus berjumlah 100%.
+- Katalog bukan batas domain model. Guard satu fragmen/karbon hanya pemeriksaan dasar. Air, CO₂, campuran, dan input tidak valid ditolak; struktur lain yang diterima tetap dapat berada di luar domain pelatihan.
+- Aplikasi tidak menyusun resep atau memprediksi campuran, ketahanan, maupun keamanan parfum. iOS dan kesiapan produksi tidak diklaim.
 
-## Pemeriksaan
+## Pemeriksaan dan dokumentasi
 
 ```powershell
 npm run lint
 npm run test:ci
-python -m unittest feature_api.test_app -v
+.\.venv-feature-api\Scripts\python.exe -B -m unittest discover -s feature_api -p 'test_*.py' -v
+.\.venv-feature-api\Scripts\python.exe -B scripts\prepare-local-models.py --verify-only
 ```
 
-Lihat [alur dan batas model](docs/B2B_LAB.md) serta [hasil verifikasi](docs/VERIFICATION.md). `com.essenza.lab` dan namespace riwayat B2B terpisah dari aplikasi B2C. iOS belum diuji dan native bridge ONNX saat ini khusus Android.
+Perintah di atas adalah prosedur pemeriksaan, bukan pernyataan hasil tes. Daftar perubahan serta **bukti aktual migrasi** dicatat pada [MIGRATION_FULL_LOCAL_20261107.md](docs/MIGRATION_FULL_LOCAL_20261107.md). [VERIFICATION.md](docs/VERIFICATION.md) dan [QA_20261106.md](docs/QA_20261106.md) adalah arsip sebelum migrasi, sehingga hasil pengujiannya tidak otomatis berlaku pada implementasi baru.
+
+[PRODUCT_ROADMAP.md](PRODUCT_ROADMAP.md) memuat cakupan B2B aktif. Dataset, proses training, model final, dan metrik penelitian tetap berasal dari repo `Perfume-MultiLabel-Classifier`; API penelitian lama di root repo tersebut bukan layanan aplikasi ini.

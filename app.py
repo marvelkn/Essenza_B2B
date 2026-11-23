@@ -1,3 +1,3 @@
-"""Vercel entrypoint for the existing Essenza feature API."""
+"""Optional import alias for the local Essenza prediction API."""
 
 from feature_api.app import app

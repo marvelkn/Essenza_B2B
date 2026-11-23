@@ -35,7 +35,8 @@ export function CollectionScreen({ service = v7PredictionService }) {
     `${item.name} ${item.note} ${item.smiles}`.toLocaleLowerCase().includes(query));
 
   const analyzeAgain = async item => {
-    if (busySmiles) { return; }
+    // Lock synchronously so rapid presses cannot enqueue duplicate inference.
+    if (controller.current) { return; }
     const currentVersion = ++version.current;
     controller.current = new AbortController();
     setBusySmiles(item.smiles);

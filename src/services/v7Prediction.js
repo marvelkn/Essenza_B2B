@@ -1,4 +1,3 @@
-import { NativeModules } from 'react-native';
 import manifest from '../assets/metadata/v7_model_manifest.json';
 import { loadFeatureApiUrl } from './featureApiConfig';
 
@@ -19,30 +18,33 @@ function cancelled(signal) {
   }
 }
 
-function assertFeatures(payload) {
-  const bits = manifest.feature_spec.n_bits;
-  const values = payload?.fingerprint;
+function assertPrediction(payload) {
+  const scores = payload?.scores;
   if (
     payload?.status !== 'ok' ||
+    payload?.runtime !== 'lightgbm' ||
     payload?.model_id !== manifest.model_id ||
     payload?.bundle_id !== manifest.bundle_id ||
     payload?.feature_schema_id !== manifest.feature_schema_id ||
-    !Array.isArray(values) ||
-    values.length !== manifest.feature_spec.dimensions.input ||
-    values.some(value => typeof value !== 'number' || !Number.isFinite(value)) ||
-    values.slice(0, bits).some(value => value !== 0 && value !== 1) ||
+    payload?.primary_threshold !== manifest.primary_threshold ||
+    payload?.label_count !== manifest.labels.length ||
+    payload?.input_dimensions !== manifest.feature_spec.dimensions.input ||
+    !Array.isArray(scores) || scores.length !== manifest.labels.length ||
+    scores.some((item, index) => item?.label !== manifest.labels[index] ||
+      typeof item.score !== 'number' || !Number.isFinite(item.score) ||
+      item.score < 0 || item.score > 1) ||
     typeof payload.smiles !== 'string' ||
-    !payload.smiles
+    !payload.smiles.trim() ||
+    !(payload.compound_name == null || typeof payload.compound_name === 'string')
   ) {
     throw new PredictionError(
-      'FEATURE_SCHEMA_MISMATCH',
+      'PREDICTION_SCHEMA_MISMATCH',
       'Layanan analisis belum cocok dengan aplikasi ini. Hubungi pengelola.',
     );
   }
-  return values;
 }
 
-async function fetchFeatures(smiles, compoundName, signal) {
+async function fetchPrediction(smiles, compoundName, signal) {
   const baseUrl = await loadFeatureApiUrl();
   if (!baseUrl) {
     throw new PredictionError('API_NOT_CONFIGURED', 'Koneksi analisis belum diatur. Buka Panduan atau hubungi pengelola.');
@@ -53,25 +55,27 @@ async function fetchFeatures(smiles, compoundName, signal) {
   const timeout = setTimeout(abort, 20000);
   try {
     cancelled(signal);
-    const response = await fetch(`${baseUrl}/fingerprint`, {
+    const response = await fetch(`${baseUrl}/predict`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         smiles: smiles || null,
         compound_name: compoundName || null,
         feature_schema_id: manifest.feature_schema_id,
+        bundle_id: manifest.bundle_id,
       }),
       signal: controller.signal,
     });
     const payload = await response.json();
+    cancelled(signal);
     if (!response.ok) {
       const detail = payload?.detail;
       throw new PredictionError(
-        detail?.code || 'FEATURE_API_ERROR',
+        detail?.code || 'PREDICTION_API_ERROR',
         detail?.message || 'Senyawa ini belum bisa diproses. Coba pilihan lain.',
       );
     }
-    assertFeatures(payload);
+    assertPrediction(payload);
     return payload;
   } catch (error) {
     if (signal?.aborted) {
@@ -110,6 +114,7 @@ async function resolve({ query, signal }) {
       signal: controller.signal,
     });
     const payload = await response.json();
+    cancelled(signal);
     if (!response.ok) {
       const detail = payload?.detail;
       throw new PredictionError(detail?.code || 'RESOLVE_ERROR',
@@ -139,40 +144,20 @@ async function resolve({ query, signal }) {
   }
 }
 
-async function runModels(features, signal, onProgress) {
-  cancelled(signal);
-  const native = NativeModules.EssenzaOnnxV7;
-  if (!native?.predict) {
-    throw new PredictionError('MODEL_ERROR', 'Paket analisis belum lengkap. Instal ulang aplikasi.');
-  }
-  onProgress?.(0, manifest.models.length);
-  let output;
-  try {
-    output = await native.predict(features, manifest.models);
-  } catch (error) {
-    throw new PredictionError('MODEL_ERROR',
-      'Analisis belum berhasil dijalankan. Coba lagi atau hubungi pengelola.');
-  }
-  cancelled(signal);
-  if (!Array.isArray(output) || output.length !== manifest.models.length ||
-      output.some(score => typeof score !== 'number' || !Number.isFinite(score) || score < 0 || score > 1)) {
-    throw new PredictionError('MODEL_ERROR', 'Hasil analisis tidak valid. Coba lagi.');
-  }
-  onProgress?.(manifest.models.length, manifest.models.length);
-  return output.map((score, index) => ({ label: manifest.models[index].label, score }));
-}
-
 async function predict({ smiles = '', compoundName = '', catalogName = '', sampleName = '', signal, onProgress }) {
-  const payload = await fetchFeatures(smiles.trim(), compoundName.trim(), signal);
-  const values = assertFeatures(payload);
-  const scores = await runModels(values, signal, onProgress);
+  cancelled(signal);
+  onProgress?.(0, manifest.labels.length);
+  const payload = await fetchPrediction(smiles.trim(), compoundName.trim(), signal);
+  cancelled(signal);
+  const scores = payload.scores.map(({ label, score }) => ({ label, score }));
+  onProgress?.(manifest.labels.length, manifest.labels.length);
   const labels = scores.filter(item => item.score >= manifest.primary_threshold)
     .sort((a, b) => b.score - a.score || a.label.localeCompare(b.label));
   sequence += 1;
   return {
     id: `v7-${Date.now()}-${sequence}`,
-    sampleName: sampleName.trim().slice(0, 80) || payload.compound_name || 'Sampel molekul',
-    inputName: catalogName.trim() || compoundName.trim() || null,
+    sampleName: (sampleName.trim() || payload.compound_name || 'Sampel molekul').slice(0, 80),
+    inputName: (catalogName.trim() || compoundName.trim()).slice(0, 200) || null,
     inputSmiles: smiles.trim() || payload.smiles,
     canonicalSmiles: payload.smiles,
     createdAt: new Date().toISOString(),

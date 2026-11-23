@@ -33,7 +33,7 @@ export function TutorialProvider({ children, enabled }) {
   const registerAnchor = useCallback((name, ref) => {
     anchors.current[name] = ref;
   }, []);
-  const openTutorial = useCallback(() => { setStep(0); setVisible(true); }, []);
+  const openTutorial = useCallback(() => { setRect(null); setStep(0); setVisible(true); }, []);
   const closeTutorial = useCallback(() => {
     setVisible(false);
     AsyncStorage.setItem(TUTORIAL_KEY, 'seen').catch(() => undefined);
@@ -45,11 +45,7 @@ export function TutorialProvider({ children, enabled }) {
   useEffect(() => {
     if (!visible) { return; }
     const target = STEPS[step].target;
-    if (target === 'collection' || target === 'guide') {
-      const index = target === 'collection' ? 1 : 3;
-      setRect({ x: width * index / 4, y: height - 69, width: width / 4, height: 62 });
-      return;
-    }
+    setRect(null);
     const timer = setTimeout(() => {
       const node = anchors.current[target]?.current;
       node?.measureInWindow((x, y, measuredWidth, measuredHeight) => {

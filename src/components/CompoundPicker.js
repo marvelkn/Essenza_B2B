@@ -97,7 +97,7 @@ export function CompoundPicker({ selected, onSelect, disabled, targetRef }) {
           </View>}
           ListEmptyComponent={<View style={s.center}>
             <Text style={s.heading}>Senyawa tidak ditemukan</Text>
-            <Text style={s.body}>Coba nama lain atau gunakan mode SMILES lanjutan.</Text>
+            <Text style={s.body}>Coba nama lain atau tutup daftar dan pilih mode Nama / rumus.</Text>
           </View>}
           renderItem={({ item }) => <Pressable
             accessibilityRole="button"

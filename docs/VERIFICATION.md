@@ -1,3 +1,9 @@
+> **ARSIP SEBELUM MIGRASI — dibaca dengan konteks tanggal**
+>
+> Isi di bawah merekam implementasi dan pengujian **29–30 September 2026**, sebelum migrasi ke preprocessing serta model LightGBM asli pada PC lokal. Klaim runtime, ukuran APK, dependensi, dan hasil tes berlaku pada implementasi yang diuji saat itu.
+>
+> Implementasi aktif dan bukti pengujian migrasi dijelaskan pada [MIGRATION_FULL_LOCAL_20261107.md](MIGRATION_FULL_LOCAL_20261107.md), [LOCAL_DEVELOPMENT.md](LOCAL_DEVELOPMENT.md), dan [B2B_LAB.md](B2B_LAB.md). Isi historis dipertahankan untuk penelusuran bukti.
+
 # Verifikasi integrasi dan alur B2B Essenza Lab
 
 Tanggal: 29 September 2026.

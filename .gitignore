@@ -74,6 +74,12 @@ yarn-error.log
 !.yarn/sdks
 !.yarn/versions
 
+# Local Python runtime and temporary logs
+.venv-feature-api/
+__pycache__/
+*.pyc
+.local-run/
+
 # Environment Variables
 .env
 .env.local
@@ -81,6 +87,6 @@ yarn-error.log
 .env.test
 .env.production
 
-# Generated v7 ONNX bundle is recreated from the audited research run.
-/android/app/src/main/assets/models/v7/
+# Byte-identical original models are prepared from the frozen research run.
+/feature_api/models/v7/
 

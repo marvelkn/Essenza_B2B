@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import manifest from '../assets/metadata/v7_model_manifest.json';
-import { loadFeatureApiUrl, saveFeatureApiUrl, validateFeatureApiUrl } from '../services/featureApiConfig';
+import { defaultFeatureApiUrl, loadFeatureApiUrl, saveFeatureApiUrl, validateFeatureApiUrl } from '../services/featureApiConfig';
 import { useTutorial } from '../tutorial/TutorialProvider';
 import { Button, Notice, Page } from '../ui/components';
 import { Icon } from '../ui/Icon';
@@ -15,6 +15,7 @@ export function GuideScreen() {
   const [apiUrl, setApiUrl] = useState('');
   const [apiStatus, setApiStatus] = useState(null);
   const [checking, setChecking] = useState(false);
+  const [capabilities, setCapabilities] = useState(null);
   useEffect(() => {
     loadFeatureApiUrl().then(value => setApiUrl(value || ''))
       .catch(error => setApiStatus(error.message));
@@ -34,15 +35,22 @@ export function GuideScreen() {
       }
       const health = await response.json();
       if (!response.ok || health.status !== 'ok' ||
+          health.runtime !== 'lightgbm' || health.capabilities?.local_prediction !== true ||
           health.model_id !== manifest.model_id ||
           health.bundle_id !== manifest.bundle_id ||
-          health.feature_schema_id !== manifest.feature_schema_id) {
+          health.feature_schema_id !== manifest.feature_schema_id ||
+          health.label_count !== manifest.labels.length ||
+          health.input_dimensions !== manifest.feature_spec.dimensions.input ||
+          health.primary_threshold !== manifest.primary_threshold) {
         throw new Error('Layanan belum cocok dengan aplikasi ini. Hubungi pengelola.');
       }
       await saveFeatureApiUrl(url);
+      setCapabilities(health.capabilities || null);
       setApiStatus('Koneksi siap dipakai.');
     } catch (error) {
-      setApiStatus(error.message || 'Koneksi belum berhasil.');
+      setApiStatus(error.name === 'AbortError' ? 'Layanan terlalu lama merespons. Pastikan server lokal berjalan.'
+        : error instanceof TypeError ? 'Layanan belum terhubung. Periksa server dan sambungan USB/jaringan.'
+        : error.message || 'Koneksi belum berhasil.');
     } finally {
       setChecking(false);
     }
@@ -80,7 +88,7 @@ export function GuideScreen() {
       <View style={s.card}>
         <Text style={s.heading}>Tentang nama dan rumus</Text>
         <Text style={s.body}>
-          Nama umum dicocokkan ke katalog, lalu PubChem jika belum ada. Satu rumus bisa punya beberapa molekul berbeda, jadi aplikasi meminta Anda memilih strukturnya.
+          Nama umum dicocokkan ke katalog lokal. Pencarian PubChem hanya digunakan jika diaktifkan pengelola dan komputer terhubung internet. Satu rumus bisa punya beberapa molekul berbeda, jadi aplikasi meminta Anda memilih strukturnya.
         </Text>
         <Text style={s.body}>
           Air dan CO2 bisa ditemukan, tetapi bukan bahan aroma yang cocok untuk prediksi model ini. Senyawa organik di luar katalog dapat dicoba, dengan hasil yang perlu dicek langsung.
@@ -99,7 +107,8 @@ export function GuideScreen() {
         </Text>
       </View>
       <Notice>
-        Prediksi baru perlu koneksi ke layanan analisis Essenza. Koleksi dan
+        Prediksi baru memerlukan komputer lokal yang menjalankan analisis Essenza
+        dan sambungan USB/jaringan lokal. Koleksi dan
         Riwayat yang sudah tersimpan tetap bisa dibuka di perangkat ini.
       </Notice>
       <View style={s.card}>
@@ -123,8 +132,9 @@ export function GuideScreen() {
       </Pressable>
       {settingsOpen && <View style={s.card}>
         <Text style={s.body}>
-          Aplikasi release memakai layanan online otomatis. Saat uji lewat USB,
-          gunakan localhost:8000 dan jalankan adb reverse untuk port 8000.
+          Pemeriksaan struktur dan prediksi aroma berjalan di komputer lokal.
+          Sambungkan HP lewat USB dan jalankan skrip lokal dari komputer.
+          Prediksi dari katalog atau SMILES tidak memerlukan internet.
         </Text>
         <TextInput
           accessibilityLabel="Alamat layanan analisis"
@@ -133,11 +143,17 @@ export function GuideScreen() {
           autoCapitalize="none"
           autoCorrect={false}
           keyboardType="url"
-          placeholder="https://api-contoh.domain"
+          placeholder={defaultFeatureApiUrl()}
           placeholderTextColor={colors.muted}
           style={s.field}
         />
+        <Button label="Gunakan koneksi USB" secondary disabled={checking}
+          onPress={() => { setApiUrl('http://127.0.0.1:8000'); setApiStatus(null); }} />
         <Button label="Simpan & tes koneksi" onPress={checkApi} loading={checking} />
+        {capabilities && apiStatus === 'Koneksi siap dipakai.' && <Text style={s.small}>
+          {capabilities.external_lookup ? 'Katalog lokal dan pencarian internet tersedia.'
+            : 'Katalog lokal dan input SMILES tersedia. Pencarian internet dinonaktifkan.'}
+        </Text>}
         {apiStatus && <Notice error={apiStatus !== 'Koneksi siap dipakai.'}>
           {apiStatus}
         </Notice>}

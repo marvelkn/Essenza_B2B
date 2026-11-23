@@ -94,7 +94,7 @@ export function ResultScreen({ route, navigation }) {
       </View>
       <Notice>{demo
         ? 'Halaman ini adalah data contoh lama, bukan hasil prediksi sungguhan.'
-        : 'Persentase menunjukkan seberapa yakin model bahwa label aroma ada pada senyawa ini, bukan seberapa kuat aromanya.'}
+        : 'Persentase adalah skor prediksi tiap label aroma, bukan kekuatan atau kadar aroma. Skor ini belum dikalibrasi sebagai peluang pasti.'}
       </Notice>
       {!demo && saved && <Text style={styles.savedStatus}>✓ Tercatat di Riwayat</Text>}
       {!saved && saveError && <Notice error>Hasil belum masuk Riwayat: {saveError}</Notice>}

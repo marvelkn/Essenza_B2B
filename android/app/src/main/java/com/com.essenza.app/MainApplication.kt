@@ -13,10 +13,7 @@ class MainApplication : Application(), ReactApplication {
     getDefaultReactHost(
       context = applicationContext,
       useDevSupport = BuildConfig.DEBUG,
-      packageList =
-        PackageList(this).packages.apply {
-          add(EssenzaOnnxPackage())
-        },
+      packageList = PackageList(this).packages,
     )
   }
 

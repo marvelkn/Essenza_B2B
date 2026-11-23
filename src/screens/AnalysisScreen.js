@@ -48,8 +48,15 @@ export function AnalysisScreen({ service = v7PredictionService }) {
     registerAnchor('predict', predictRef);
   }, [registerAnchor]);
   useEffect(() => {
+    if (tutorialVisible && tutorialStep === 0) { setInputMode('catalog'); }
     if (tutorialVisible && tutorialStep < 3) {
-      const timer = setTimeout(() => scrollRef.current?.scrollTo({ y: 300, animated: true }), 160);
+      const timer = setTimeout(() => {
+        if (tutorialStep === 2) {
+          scrollRef.current?.scrollToEnd({ animated: true });
+        } else {
+          scrollRef.current?.scrollTo({ y: 300, animated: true });
+        }
+      }, 160);
       return () => clearTimeout(timer);
     }
   }, [tutorialVisible, tutorialStep]);
@@ -69,6 +76,14 @@ export function AnalysisScreen({ service = v7PredictionService }) {
       };
     }, []),
   );
+  const changeMode = mode => {
+    if (inFlight.current) { return; }
+    lookupController.current?.abort();
+    lookupVersion.current += 1;
+    setResolving(false);
+    setInputMode(mode);
+    setError(null);
+  };
   const changeQuery = text => {
     lookupController.current?.abort();
     lookupVersion.current += 1;
@@ -111,7 +126,7 @@ export function AnalysisScreen({ service = v7PredictionService }) {
     if (inFlight.current) {
       return;
     }
-    const activeCompound = inputMode === 'catalog' ? selectedCompound : resolvedCompound;
+    const activeCompound = inputMode === 'catalog' ? selectedCompound : inputMode === 'translator' ? resolvedCompound : null;
     const problem = inputMode === 'smiles' ? inputError(smiles)
       : inputMode === 'translator'
         ? !resolvedCompound ? 'Cari lalu pilih satu struktur senyawa dulu.'
@@ -168,7 +183,7 @@ export function AnalysisScreen({ service = v7PredictionService }) {
     }
   };
   const saveSelected = async () => {
-    const activeCompound = inputMode === 'catalog' ? selectedCompound : resolvedCompound;
+    const activeCompound = inputMode === 'catalog' ? selectedCompound : inputMode === 'translator' ? resolvedCompound : null;
     if (!activeCompound) { return; }
     try {
       await favorites.create({
@@ -180,7 +195,7 @@ export function AnalysisScreen({ service = v7PredictionService }) {
       setError(cause?.message || 'Senyawa belum tersimpan.');
     }
   };
-  const activeCompound = inputMode === 'catalog' ? selectedCompound : resolvedCompound;
+  const activeCompound = inputMode === 'catalog' ? selectedCompound : inputMode === 'translator' ? resolvedCompound : null;
   const selectedSaved = activeCompound && favorites.items.some(item =>
     item.smiles === activeCompound.smiles);
   return (
@@ -210,7 +225,8 @@ export function AnalysisScreen({ service = v7PredictionService }) {
             <Pressable
               accessibilityRole="button"
               accessibilityLabel="Pilih dari katalog"
-              onPress={() => { setInputMode('catalog'); setError(null); }}
+              disabled={busy}
+              onPress={() => changeMode('catalog')}
               style={[styles.mode, inputMode === 'catalog' && styles.selected]}
             >
               <Text style={s.label}>Pilih senyawa</Text>
@@ -219,7 +235,8 @@ export function AnalysisScreen({ service = v7PredictionService }) {
               accessibilityRole="button"
               accessibilityLabel="Cari nama atau rumus"
               ref={translatorRef}
-              onPress={() => { setInputMode('translator'); setError(null); }}
+              disabled={busy}
+              onPress={() => changeMode('translator')}
               style={[styles.mode, inputMode === 'translator' && styles.selected]}
             >
               <Text style={s.label}>Nama / rumus</Text>
@@ -228,7 +245,8 @@ export function AnalysisScreen({ service = v7PredictionService }) {
           <Pressable
             accessibilityRole="button"
             accessibilityLabel="Input SMILES lanjutan"
-            onPress={() => { setInputMode('smiles'); setError(null); }}
+            disabled={busy}
+              onPress={() => changeMode('smiles')}
             style={styles.advancedLink}
           >
             <Text style={styles.advancedText}>Punya kode SMILES? Buka input lanjutan →</Text>
@@ -265,7 +283,7 @@ export function AnalysisScreen({ service = v7PredictionService }) {
               onSubmitEditing={resolveQuery}
             />
             <Text style={s.small}>
-              Nama dicari di katalog dulu, lalu di basis data kimia. Rumus bisa cocok dengan beberapa struktur.
+              Nama dicocokkan ke katalog. Pencarian internet tersedia jika diaktifkan pengelola. Satu rumus bisa cocok dengan beberapa struktur.
             </Text>
             <Button label={resolving ? 'Mencari senyawa…' : 'Cari struktur'}
               secondary loading={resolving} disabled={busy || resolving} onPress={resolveQuery} />

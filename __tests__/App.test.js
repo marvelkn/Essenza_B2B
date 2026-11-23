@@ -104,7 +104,7 @@ test('successful prediction enters history automatically without adding to Kolek
   await showResult();
   expect(JSON.stringify(tree.toJSON())).toContain('HASIL PREDIKSI');
   expect(JSON.stringify(tree.toJSON())).toContain('82%');
-  expect(JSON.stringify(tree.toJSON())).toContain('bukan seberapa kuat aromanya');
+  expect(JSON.stringify(tree.toJSON())).toContain('bukan kekuatan atau kadar aroma');
   expect(JSON.stringify(tree.toJSON())).toContain('Tercatat di Riwayat');
   expect(button('Coba simpan ke Riwayat')).toBeUndefined();
   const saved = JSON.parse(AsyncStorage.setItem.mock.calls
@@ -112,6 +112,15 @@ test('successful prediction enters history automatically without adding to Kolek
   expect(saved.records).toHaveLength(1);
   expect(saved.records[0].demo).toBe(false);
   expect(AsyncStorage.setItem).not.toHaveBeenCalledWith(FAVORITES_KEY, expect.any(String));
+});
+
+test('custom navigation tabs expose their real selected state and label', async () => {
+  const tab = id => tree.root.findAll(node => node.props.testID === id && node.props.accessibilityRole === 'tab')[0];
+  expect(tab('analysis').props.accessibilityState.selected).toBe(true);
+  expect(tab('analysis').props.accessibilityLabel).toBe('Analisis');
+  await pressTab('Koleksi');
+  expect(tab('analysis').props.accessibilityState.selected).toBe(false);
+  expect(tab('collection').props.accessibilityState.selected).toBe(true);
 });
 
 test('running ML twice records two separate history entries', async () => {
@@ -166,6 +175,38 @@ test('name or formula mode requires a confirmed candidate before prediction', as
     smiles: 'CCO', catalogName: 'Ethanol',
   }));
   expect(AsyncStorage.setItem).toHaveBeenCalledWith(HISTORY_KEY, expect.any(String));
+});
+
+test('switching to SMILES hides the previous translator compound save action', async () => {
+  v7PredictionService.resolve.mockResolvedValue([
+    { name: 'Ethanol', smiles: 'CCO', molecular_formula: 'C2H6O', in_catalog: true, prediction_supported: true },
+  ]);
+  await press('Cari nama atau rumus');
+  await act(async () => tree.root.findAllByType(TextInput)
+    .find(node => node.props.accessibilityLabel === 'Nama atau rumus senyawa').props.onChangeText('Ethanol'));
+  await act(async () => button('Cari struktur').props.onPress());
+  await press('Pilih struktur Ethanol, C2H6O');
+  expect(button('Simpan senyawa ke Koleksi')).toBeDefined();
+  await press('Input SMILES lanjutan');
+  expect(button('Simpan senyawa ke Koleksi')).toBeUndefined();
+  expect(AsyncStorage.setItem).not.toHaveBeenCalledWith(FAVORITES_KEY, expect.any(String));
+});
+
+test('a late lookup response cannot repopulate candidates after switching modes', async () => {
+  let finish;
+  v7PredictionService.resolve.mockImplementation(() => new Promise(resolve => { finish = resolve; }));
+  await press('Cari nama atau rumus');
+  await act(async () => tree.root.findAllByType(TextInput)
+    .find(node => node.props.accessibilityLabel === 'Nama atau rumus senyawa').props.onChangeText('Ethanol'));
+  await act(async () => { button('Cari struktur').props.onPress(); });
+  const signal = v7PredictionService.resolve.mock.calls[0][0].signal;
+  await press('Pilih dari katalog');
+  expect(signal.aborted).toBe(true);
+  await act(async () => finish([
+    { name: 'Old candidate', smiles: 'CCO', molecular_formula: 'C2H6O', in_catalog: true, prediction_supported: true },
+  ]));
+  await press('Cari nama atau rumus');
+  expect(JSON.stringify(tree.toJSON())).not.toContain('Old candidate');
 });
 
 test('editing a resolved query clears the selection and blocks stale prediction', async () => {

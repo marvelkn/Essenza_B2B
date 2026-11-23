@@ -12,7 +12,7 @@ import { GuideScreen } from './screens/GuideScreen';
 import { SplashScreen } from './screens/SplashScreen';
 import { LabProvider } from './storage/LabProvider';
 import { FavoritesProvider } from './storage/FavoritesProvider';
-import { TutorialProvider } from './tutorial/TutorialProvider';
+import { TutorialProvider, useTutorial } from './tutorial/TutorialProvider';
 import { Icon } from './ui/Icon';
 import { colors, sans } from './ui/theme';
 
@@ -45,10 +45,22 @@ const theme = {
 };
 
 // Komponen tombol tab kustom: pill hijau + emas saat aktif
-function TabButton({ children, onPress, onLongPress, accessibilityState }) {
-  const focused = accessibilityState?.selected;
+function TabButton({ children, onPress, onLongPress, accessibilityState, accessibilityLabel, testID,
+  'aria-selected': ariaSelected, 'aria-label': ariaLabel }) {
+  const anchor = useRef(null);
+  const { registerAnchor } = useTutorial();
+  useEffect(() => {
+    if (testID) { registerAnchor(testID, anchor); }
+  }, [testID, registerAnchor]);
+  const focused = ariaSelected ?? accessibilityState?.selected ?? false;
   return (
     <Pressable
+      ref={anchor}
+      collapsable={false}
+      accessibilityRole="tab"
+      accessibilityLabel={ariaLabel || accessibilityLabel}
+      accessibilityState={{ ...accessibilityState, selected: focused }}
+      testID={testID}
       onPress={onPress}
       onLongPress={onLongPress}
       style={[tabStyles.btn, focused && tabStyles.btnActive]}
@@ -97,6 +109,8 @@ function Workspace() {
         },
         tabBarIcon: tabIcons[route.name],
         tabBarButton: TabButton,
+        tabBarButtonTestID: route.name.toLowerCase(),
+        tabBarAccessibilityLabel: { Analysis: 'Analisis', Collection: 'Koleksi', History: 'Riwayat', Guide: 'Panduan' }[route.name],
       })}
     >
       <Tab.Screen
