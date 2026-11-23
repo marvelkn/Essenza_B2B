@@ -1,0 +1,617 @@
+[
+  {
+    "id": "external:13431-57-7",
+    "name": "Velberry",
+    "smiles": "CC(=O)OCC(C)(C)COC(C)=O",
+    "cid": "83442",
+    "cas": "13431-57-7",
+    "aliases": [
+      "Neopentyl glycol diacetate",
+      "2,2-dimethylpropane-1,3-diol diacetate"
+    ],
+    "source": "https://www.basf.com/global/en/media/news-releases/2020/09/p-20-278"
+  },
+  {
+    "id": "external:62439-42-3",
+    "name": "Hydrofleur",
+    "smiles": "CC(C=O)CCCC(C)(C)O",
+    "cid": "20554059",
+    "cas": "62439-42-3",
+    "aliases": [
+      "6-hydroxy-2,6-dimethylheptanal",
+      "Hydroxymelonal"
+    ],
+    "structureNote": "Stereokimia belum ditentukan di sumber.",
+    "source": "https://bedoukian.com/wp-content/uploads/FR-279-SUS-spec-sheet.pdf"
+  },
+  {
+    "id": "external:5533-03-9",
+    "name": "Mevanyl",
+    "smiles": "COCc1ccc(O)c(OC)c1",
+    "cid": "79662",
+    "cas": "5533-03-9",
+    "aliases": [
+      "Methyl vanillyl ether",
+      "Vani-White",
+      "2-methoxy-4-(methoxymethyl)phenol"
+    ],
+    "source": "https://d3t14p1xronwr0.cloudfront.net/docs/standards/IFRA_STD_257.pdf"
+  },
+  {
+    "id": "external:916887-53-1",
+    "name": "Petalia",
+    "smiles": "Cc1ccccc1C(C#N)=C1CCCCC1",
+    "cid": null,
+    "cas": "916887-53-1",
+    "aliases": [
+      "2-cyclohexylidene-2-ortho-tolylacetonitrile"
+    ],
+    "source": "https://ifrafragrance.org/standards/IFRA_STD_225.pdf"
+  },
+  {
+    "id": "external:94400-98-3",
+    "name": "(1aR,4S,7aS)-1a,3,3,4,6,6-hexamethyl-4,5,7,7a-tetrahydro-2H-naphtho[2,3-b]oxirene",
+    "smiles": "C[C@H]1CC(C)(C)C2=C(C[C@@]3(C)O[C@H]3C2)C1(C)C",
+    "cid": "44152188",
+    "cas": "94400-98-3",
+    "aliases": [],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/44152188#section=Fragrances"
+  },
+  {
+    "id": "external:3288-99-1",
+    "name": "(4-tert-Butylphenyl)acetonitrile",
+    "smiles": "CC(C)(C)c1ccc(CC#N)cc1",
+    "cid": "76784",
+    "cas": "3288-99-1",
+    "aliases": [
+      "2-(4-tert-butylphenyl)acetonitrile"
+    ],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/76784#section=Fragrances"
+  },
+  {
+    "id": "external:621-23-8",
+    "name": "1,3,5-trimethoxybenzene",
+    "smiles": "COc1cc(OC)cc(OC)c1",
+    "cid": "69301",
+    "cas": "621-23-8",
+    "aliases": [],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/69301#section=Fragrances"
+  },
+  {
+    "id": "external:1631962-93-0",
+    "name": "1-(2-methylpropyl)-4-(propoxymethyl)benzene",
+    "smiles": "CCCOCc1ccc(CC(C)C)cc1",
+    "cid": "122553315",
+    "cas": "1631962-93-0",
+    "aliases": [],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/122553315#section=Fragrances"
+  },
+  {
+    "id": "external:24948-66-1",
+    "name": "1-Decen-4-yne",
+    "smiles": "C=CCC#CCCCCC",
+    "cid": "4321798",
+    "cas": "24948-66-1",
+    "aliases": [
+      "dec-1-en-4-yne"
+    ],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/4321798#section=Fragrances"
+  },
+  {
+    "id": "external:cid:6450539",
+    "name": "2,12-Tridecadienenitrile, (2E)",
+    "smiles": "C=CCCCCCCCC/C=C/C#N",
+    "cid": "6450539",
+    "cas": null,
+    "aliases": [
+      "(2E)-trideca-2,12-dienenitrile"
+    ],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/6450539#section=Fragrances"
+  },
+  {
+    "id": "external:81782-89-0",
+    "name": "2,4,4,7-Tetramethylnona-6,8-dien-3-one",
+    "smiles": "C=C/C(C)=C/CC(C)(C)C(=O)C(C)C",
+    "cid": "6441956",
+    "cas": "81782-89-0",
+    "aliases": [
+      "(6E)-2,4,4,7-tetramethylnona-6,8-dien-3-one"
+    ],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/6441956#section=Fragrances"
+  },
+  {
+    "id": "external:71119-07-8",
+    "name": "2-ethoxy-4-(ethoxymethyl)phenol",
+    "smiles": "CCOCc1ccc(O)c(OCC)c1",
+    "cid": "85976784",
+    "cas": "71119-07-8",
+    "aliases": [],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/85976784#section=Fragrances"
+  },
+  {
+    "id": "external:96840-56-1",
+    "name": "2-Ethoxy-4-[(1-methylethoxy)methyl] phenol",
+    "smiles": "CCOc1cc(COC(C)C)ccc1O",
+    "cid": "20208170",
+    "cas": "96840-56-1",
+    "aliases": [
+      "2-ethoxy-4-(propan-2-yloxymethyl)phenol"
+    ],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/20208170#section=Fragrances"
+  },
+  {
+    "id": "external:16493-96-2",
+    "name": "2-Hexenoic acid, 2-methyl-, methyl ester, (2E)-",
+    "smiles": "CCC/C=C(\\C)C(=O)OC",
+    "cid": "5364816",
+    "cas": "16493-96-2",
+    "aliases": [
+      "methyl (E)-2-methylhex-2-enoate"
+    ],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/5364816#section=Fragrances"
+  },
+  {
+    "id": "external:31574-44-4",
+    "name": "2-Isopropyl-4-methylanisole",
+    "smiles": "COc1ccc(C)cc1C(C)C",
+    "cid": "161716",
+    "cas": "31574-44-4",
+    "aliases": [
+      "1-methoxy-4-methyl-2-propan-2-ylbenzene"
+    ],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/161716#section=Fragrances"
+  },
+  {
+    "id": "external:127459-79-4",
+    "name": "2-Naphthalenecarboxaldehyde, 5,6,7,8-tetrahydro-3,5,5,6,7,8,8-heptamethyl-",
+    "smiles": "Cc1cc2c(cc1C=O)C(C)(C)[C@H](C)[C@@H](C)C2(C)C",
+    "cid": "22861286",
+    "cas": "127459-79-4",
+    "aliases": [
+      "(6R,7R)-3,5,5,6,7,8,8-heptamethyl-6,7-dihydronaphthalene-2-carbaldehyde"
+    ],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/22861286#section=Fragrances"
+  },
+  {
+    "id": "external:238402-46-5",
+    "name": "2-Propenoic acid, 3-(2-hydroxyphenyl)-, 9-decen-1-yl ester, (2E)-",
+    "smiles": "C=CCCCCCCCCOC(=O)/C=C/c1ccccc1O",
+    "cid": "17782009",
+    "cas": "238402-46-5",
+    "aliases": [
+      "dec-9-enyl (E)-3-(2-hydroxyphenyl)prop-2-enoate"
+    ],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/17782009#section=Fragrances"
+  },
+  {
+    "id": "external:cid:17307",
+    "name": "2-Pyridinecarboxylic acid, ethyl ester",
+    "smiles": "CCOC(=O)c1ccccn1",
+    "cid": "17307",
+    "cas": null,
+    "aliases": [
+      "ethyl pyridine-2-carboxylate"
+    ],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/17307#section=Fragrances"
+  },
+  {
+    "id": "external:195251-91-3",
+    "name": "2H-1,5-Benzodioxepin-3(4H)-one, 7-(1,1-dimethylethyl)-",
+    "smiles": "CC(C)(C)c1ccc2c(c1)OCC(=O)CO2",
+    "cid": "16723825",
+    "cas": "195251-91-3",
+    "aliases": [
+      "7-tert-butyl-1,5-benzodioxepin-3-one"
+    ],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/16723825#section=Fragrances"
+  },
+  {
+    "id": "external:6939-35-1",
+    "name": "3,4-Dihydro-5-methylnaphthalen-1(2H)-one",
+    "smiles": "Cc1cccc2c1CCCC2=O",
+    "cid": "81357",
+    "cas": "6939-35-1",
+    "aliases": [
+      "5-methyl-3,4-dihydro-2H-naphthalen-1-one"
+    ],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/81357#section=Fragrances"
+  },
+  {
+    "id": "external:22884-95-3",
+    "name": "3,4-dimethylbenzonitrile",
+    "smiles": "Cc1ccc(C#N)cc1C",
+    "cid": "89884",
+    "cas": "22884-95-3",
+    "aliases": [],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/89884#section=Fragrances"
+  },
+  {
+    "id": "external:4179-19-5",
+    "name": "3,5-Dimethoxytoluene",
+    "smiles": "COc1cc(C)cc(OC)c1",
+    "cid": "77844",
+    "cas": "4179-19-5",
+    "aliases": [
+      "1,3-dimethoxy-5-methylbenzene"
+    ],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/77844#section=Fragrances"
+  },
+  {
+    "id": "external:67634-14-4",
+    "name": "3-(o-Ethylphenyl)-2,2-dimethylpropionaldehyde",
+    "smiles": "CCc1ccccc1CC(C)(C)C=O",
+    "cid": "105512",
+    "cas": "67634-14-4",
+    "aliases": [
+      "3-(2-ethylphenyl)-2,2-dimethylpropanal"
+    ],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/105512#section=Fragrances"
+  },
+  {
+    "id": "external:215305-10-5",
+    "name": "3-Hexene, 1,1',''-[ethylidynestris(oxy)]tris-, (3Z, 3'Z,3\"Z)-",
+    "smiles": "CC/C=C\\CCOC(C)(OCC/C=C\\CC)OCC/C=C\\CC",
+    "cid": "92033997",
+    "cas": "215305-10-5",
+    "aliases": [
+      "(Z)-1-[1,1-bis[(Z)-hex-3-enoxy]ethoxy]hex-3-ene"
+    ],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/92033997#section=Fragrances"
+  },
+  {
+    "id": "external:621-27-2",
+    "name": "3-Propylphenol",
+    "smiles": "CCCc1cccc(O)c1",
+    "cid": "69302",
+    "cas": "621-27-2",
+    "aliases": [],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/69302#section=Fragrances"
+  },
+  {
+    "id": "external:61315-75-1",
+    "name": "4-(4-Methyl-3-penten-1-yl)-2(5H)-furanone",
+    "smiles": "CC(C)=CCCC1=CC(=O)OC1",
+    "cid": "11041080",
+    "cas": "61315-75-1",
+    "aliases": [
+      "3-(4-methylpent-3-enyl)-2H-furan-5-one"
+    ],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/11041080#section=Fragrances"
+  },
+  {
+    "id": "external:1815-99-2",
+    "name": "4-decylpyridine",
+    "smiles": "CCCCCCCCCCc1ccncc1",
+    "cid": "13563860",
+    "cas": "1815-99-2",
+    "aliases": [],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/13563860#section=Fragrances"
+  },
+  {
+    "id": "external:84625-54-7",
+    "name": "4-Methyl-2-pentylpyridine",
+    "smiles": "CCCCCc1cc(C)ccn1",
+    "cid": "3020010",
+    "cas": "84625-54-7",
+    "aliases": [],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/3020010#section=Fragrances"
+  },
+  {
+    "id": "external:1226911-69-8",
+    "name": "4-Pentenal, 4-methyl-5-(4-methylphenyl)-, (4E)-",
+    "smiles": "C/C(=C\\c1ccc(C)cc1)CCC=O",
+    "cid": "71465644",
+    "cas": "1226911-69-8",
+    "aliases": [
+      "(E)-4-methyl-5-(4-methylphenyl)pent-4-enal"
+    ],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/71465644#section=Fragrances"
+  },
+  {
+    "id": "external:85700-01-2",
+    "name": "5,8-Methano-2H-1-benzopyran, 6-ethylideneoctahydro-, (4aalpha,5beta,7E,8beta,8aalpha)-",
+    "smiles": "C/C=C1\\C[C@@H]2C[C@H]1[C@H]1OCCC[C@@H]21",
+    "cid": "165360120",
+    "cas": "85700-01-2",
+    "aliases": [
+      "(1R,2S,7S,8S,10E)-10-ethylidene-3-oxatricyclo[6.2.1.02,7]undecane"
+    ],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/165360120#section=Fragrances"
+  },
+  {
+    "id": "external:39770-04-2",
+    "name": "8-Nonenal",
+    "smiles": "C=CCCCCCCC=O",
+    "cid": "161998",
+    "cas": "39770-04-2",
+    "aliases": [
+      "non-8-enal"
+    ],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/161998#section=Fragrances"
+  },
+  {
+    "id": "external:179911-08-1",
+    "name": "Agarbois",
+    "smiles": "CCC(=O)N(CC)c1cccc(C)c1",
+    "cid": "44150680",
+    "cas": "179911-08-1",
+    "aliases": [
+      "N-ethyl-N-(3-methylphenyl)propanamide"
+    ],
+    "source": "https://one.oecd.org/document/ENV/CBC/MONO(2021)9/En/pdf#page=55"
+  },
+  {
+    "id": "external:68844-97-3",
+    "name": "Benzeneacetaldehyde, 3,4-dimethyl-",
+    "smiles": "Cc1ccc(CC=O)cc1C",
+    "cid": "111648",
+    "cas": "68844-97-3",
+    "aliases": [
+      "2-(3,4-dimethylphenyl)acetaldehyde"
+    ],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/111648#section=Fragrances"
+  },
+  {
+    "id": "external:cid:121232770",
+    "name": "Butyl 2-methylcrotonate (Z)",
+    "smiles": "C=C(CCCC)/C(C)=C\\C",
+    "cid": "121232770",
+    "cas": null,
+    "aliases": [
+      "(Z)-3-methyl-4-methylideneoct-2-ene"
+    ],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/121232770#section=Fragrances"
+  },
+  {
+    "id": "external:132638-45-0",
+    "name": "Carbonic acid, 2-methoxy-4-methylphenyl methyl ester",
+    "smiles": "COC(=O)Oc1ccc(C)cc1OC",
+    "cid": "15636422",
+    "cas": "132638-45-0",
+    "aliases": [
+      "(2-methoxy-4-methylphenyl) methyl carbonate"
+    ],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/15636422#section=Fragrances"
+  },
+  {
+    "id": "external:1888-90-0",
+    "name": "Cyclohexene, 3-methylene-",
+    "smiles": "C=C1C=CCCC1",
+    "cid": "219357",
+    "cas": "1888-90-0",
+    "aliases": [
+      "3-methylidenecyclohexene"
+    ],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/219357#section=Fragrances"
+  },
+  {
+    "id": "external:14315-63-0",
+    "name": "cyclohexylmethoxymethylcyclohexane",
+    "smiles": "C1CCC(COCC2CCCCC2)CC1",
+    "cid": "12084153",
+    "cas": "14315-63-0",
+    "aliases": [],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/12084153#section=Fragrances"
+  },
+  {
+    "id": "external:cid:12697181",
+    "name": "Ethanone, 1-(1-cycloocten-1-yl)-",
+    "smiles": "CC(=O)/C1=C/CCCCCC1",
+    "cid": "12697181",
+    "cas": null,
+    "aliases": [
+      "1-[(1E)-cycloocten-1-yl]ethanone"
+    ],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/12697181#section=Fragrances"
+  },
+  {
+    "id": "external:100520-15-8",
+    "name": "ethyl 4,6,6-trimethylcyclohexa-1,3-diene-1-carboxylate",
+    "smiles": "CCOC(=O)C1=CC=C(C)CC1(C)C",
+    "cid": "68524240",
+    "cas": "100520-15-8",
+    "aliases": [],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/68524240#section=Fragrances"
+  },
+  {
+    "id": "external:2810-04-0",
+    "name": "ethyl thiophene-2-carboxylate",
+    "smiles": "CCOC(=O)c1cccs1",
+    "cid": "76052",
+    "cas": "2810-04-0",
+    "aliases": [],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/76052#section=Fragrances"
+  },
+  {
+    "id": "external:188417-26-7",
+    "name": "Ethyl vanillin isobutyrate",
+    "smiles": "CCOc1cc(C=O)ccc1OC(=O)C(C)C",
+    "cid": "673160",
+    "cas": "188417-26-7",
+    "aliases": [
+      "(2-ethoxy-4-formylphenyl) 2-methylpropanoate"
+    ],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/673160#section=Fragrances"
+  },
+  {
+    "id": "external:56438-09-6",
+    "name": "Heptylidene diacetate",
+    "smiles": "CCCCCCC(OC(C)=O)OC(C)=O",
+    "cid": "91861",
+    "cas": "56438-09-6",
+    "aliases": [
+      "1-acetyloxyheptyl acetate"
+    ],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/91861#section=Fragrances"
+  },
+  {
+    "id": "external:210035-91-9",
+    "name": "Herbanate",
+    "smiles": "CCOC(=O)[C@@H]1[C@@H](C(C)C)[C@H]2C=C[C@@H]1C2",
+    "cid": null,
+    "cas": "210035-91-9",
+    "aliases": [
+      "Ethyl isopropylbicyclo[2.2.1]hept-5-ene-2-carboxylate"
+    ],
+    "source": "https://one.oecd.org/document/ENV/CBC/MONO(2021)9/En/pdf#page=56"
+  },
+  {
+    "id": "external:89319-68-6",
+    "name": "hexadec-9-yn-8-one",
+    "smiles": "CCCCCCC#CC(=O)CCCCCCC",
+    "cid": "11310919",
+    "cas": "89319-68-6",
+    "aliases": [],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/11310919#section=Fragrances"
+  },
+  {
+    "id": "external:628-73-9",
+    "name": "Hexanenitrile",
+    "smiles": "CCCCCC#N",
+    "cid": "12352",
+    "cas": "628-73-9",
+    "aliases": [],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/12352#section=Fragrances"
+  },
+  {
+    "id": "external:1853175-99-1",
+    "name": "Maderal",
+    "smiles": "CC1(C)C=C(C2(C)OCC(C)(C)CO2)CCC1",
+    "cid": "132165004",
+    "cas": "1853175-99-1",
+    "aliases": [
+      "2-(3,3-dimethylcyclohexen-1-yl)-2,5,5-trimethyl-1,3-dioxane"
+    ],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/132165004#section=Fragrances"
+  },
+  {
+    "id": "external:1536326-17-6",
+    "name": "Mahonial",
+    "smiles": "C/C(=C\\CCC=O)CCCC(C)(C)O",
+    "cid": null,
+    "cas": "1536326-17-6",
+    "aliases": [
+      "(E)-9-hydroxy-5,9-dimethyldec-4-enal"
+    ],
+    "source": "https://one.oecd.org/document/ENV/CBC/MONO(2021)9/En/pdf#page=57"
+  },
+  {
+    "id": "external:6324-78-3",
+    "name": "P-(2,2-Dimethoxyethoxy)toluene",
+    "smiles": "COC(COc1ccc(C)cc1)OC",
+    "cid": "80614",
+    "cas": "6324-78-3",
+    "aliases": [
+      "1-(2,2-dimethoxyethoxy)-4-methylbenzene"
+    ],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/80614#section=Fragrances"
+  },
+  {
+    "id": "external:24700-20-7",
+    "name": "P-Tolyl 3-methylcrotonate",
+    "smiles": "CC(C)=CC(=O)Oc1ccc(C)cc1",
+    "cid": "90591",
+    "cas": "24700-20-7",
+    "aliases": [
+      "(4-methylphenyl) 3-methylbut-2-enoate"
+    ],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/90591#section=Fragrances"
+  },
+  {
+    "id": "external:1584709-99-8",
+    "name": "Propanoic acid, 2,2-dimethyl-, (1S)-1-methyl-2-(1-methylethoxy)-2-oxoethyl ester",
+    "smiles": "CC(C)OC(=O)[C@H](C)OC(=O)C(C)(C)C",
+    "cid": "121317744",
+    "cas": "1584709-99-8",
+    "aliases": [
+      "[(2S)-1-oxo-1-propan-2-yloxypropan-2-yl] 2,2-dimethylpropanoate"
+    ],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/121317744#section=Fragrances"
+  },
+  {
+    "id": "external:68844-95-1",
+    "name": "Pyrazine, 2-methoxy-3-(4-methylpentyl)-",
+    "smiles": "COc1nccnc1CCCC(C)C",
+    "cid": "111647",
+    "cas": "68844-95-1",
+    "aliases": [
+      "2-methoxy-3-(4-methylpentyl)pyrazine"
+    ],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/111647#section=Fragrances"
+  },
+  {
+    "id": "external:90145-47-4",
+    "name": "Pyridine, 3-(2,2-dimethylpropyl)-",
+    "smiles": "CC(C)(C)Cc1cccnc1",
+    "cid": "13287120",
+    "cas": "90145-47-4",
+    "aliases": [
+      "3-(2,2-dimethylpropyl)pyridine"
+    ],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/13287120#section=Fragrances"
+  },
+  {
+    "id": "external:710-40-7",
+    "name": "Pyridine, 5-hexyl-2-methyl-",
+    "smiles": "CCCCCCc1ccc(C)nc1",
+    "cid": "522401",
+    "cas": "710-40-7",
+    "aliases": [
+      "5-hexyl-2-methylpyridine"
+    ],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/522401#section=Fragrances"
+  },
+  {
+    "id": "external:188199-50-0",
+    "name": "Spiro[bicyclo[2.2.1]heptane-s,4'-[1,2]dioxane], 1,7,7-trimethyl-2'-(methylethyl)-, (1R,2S,2'S,4R)",
+    "smiles": "CC(C)[C@H]1OCC[C@]2(C[C@H]3CC[C@]2(C)C3(C)C)O1",
+    "cid": "11043252",
+    "cas": "188199-50-0",
+    "aliases": [
+      "(1'R,2S,4S,4'R)-1',7',7'-trimethyl-2-propan-2-ylspiro[1,3-dioxane-4,2'-bicyclo[2.2.1]heptane]"
+    ],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/11043252#section=Fragrances"
+  },
+  {
+    "id": "external:224031-70-3",
+    "name": "Spirogalbanone",
+    "smiles": "C=CCCC(=O)C1=CCCC2(CCCC2)C1",
+    "cid": "15405344",
+    "cas": "224031-70-3",
+    "aliases": [
+      "1-(Spiro[4.5]dec-7-en-7-yl)pent-4-en-1-one"
+    ],
+    "source": "https://one.oecd.org/document/ENV/CBC/MONO(2021)9/En/pdf#page=58"
+  },
+  {
+    "id": "external:133636-82-5",
+    "name": "Trimethyl-bicyclo-heptane-spirocyclohexenone",
+    "smiles": "C[C@H]1[C@@H]2C[C@H](C[C@@]13C=CC(=O)CC3)C2(C)C",
+    "cid": "117859414",
+    "cas": "133636-82-5",
+    "aliases": [
+      "(1S,2S,3S,5R)-2,6,6-trimethylspiro[bicyclo[3.1.1]heptane-3,4'-cyclohex-2-ene]-1'-one"
+    ],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/117859414#section=Fragrances"
+  },
+  {
+    "id": "external:53179-04-7",
+    "name": "Undec-10-enonitrile",
+    "smiles": "C=CCCCCCCCCC#N",
+    "cid": "104424",
+    "cas": "53179-04-7",
+    "aliases": [
+      "undec-10-enenitrile"
+    ],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/104424#section=Fragrances"
+  },
+  {
+    "id": "external:2244-07-7",
+    "name": "Undecanenitrile",
+    "smiles": "CCCCCCCCCCC#N",
+    "cid": "16722",
+    "cas": "2244-07-7",
+    "aliases": [],
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/16722#section=Fragrances"
+  }
+]

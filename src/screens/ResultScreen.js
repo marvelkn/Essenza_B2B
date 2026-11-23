@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
+import { isOutsideDataset } from '../domain/catalog';
 import { useLab } from '../storage/LabProvider';
 import { useFavorites } from '../storage/FavoritesProvider';
 import {
@@ -96,6 +97,9 @@ export function ResultScreen({ route, navigation }) {
         ? 'Halaman ini adalah data contoh lama, bukan hasil prediksi sungguhan.'
         : 'Persentase adalah skor prediksi tiap label aroma, bukan kekuatan atau kadar aroma. Skor ini belum dikalibrasi sebagai peluang pasti.'}
       </Notice>
+      {!demo && isOutsideDataset(result.canonicalSmiles) && <Notice>
+        Struktur ini di luar dataset penelitian. Skor ini adalah prediksi eksploratif.
+      </Notice>}
       {!demo && saved && <Text style={styles.savedStatus}>✓ Tercatat di Riwayat</Text>}
       {!saved && saveError && <Notice error>Hasil belum masuk Riwayat: {saveError}</Notice>}
       <View style={s.card}>

@@ -130,3 +130,35 @@ Pengujian mencakup satu HP dan skenario di atas. Seluruh 6.686 senyawa, beban ko
 Manifest lengkap setiap berkas beserta aksi, hash sebelum/sesudah, model salinan, dan lokasi arsip: `C:\Users\ACER\Documents\ChatGPT\Project Skripsi\output\full_local_20261106\changes.json`. Snapshot frontend (217 berkas) dan laporan (82 berkas), backup dokumentasi/backend/guide, serta manifest ZIP telah diverifikasi di `C:\Users\ACER\Documents\ChatGPT\Project Skripsi\output\full_local_20261106`. Tidak ada reset, commit, push, atau perpindahan branch; frontend tetap **marvel**, backend tetap **main**.
 
 Paket sumber laporan siap diunggah ke Overleaf: `C:\Users\ACER\Documents\ChatGPT\Project Skripsi\output\full_local_20261106\deliverables\laporan_full_local_20261107.zip`; seluruh **82 sumber** diverifikasi terhadap folder utama. PDF hasil kompilasi utama: `C:\Users\ACER\Documents\Marvel\Skripsi\Laporan Skripsi\2521_skripsi_Marvel_Kevin_Nathanael\output\pdf\SKRIPSI_full_local_20261107.pdf`.
+
+## Verifikasi pilihan cepat katalog (23 November 2026)
+
+Pilihan cepat bertambah dari tiga menjadi tujuh dengan Limonene, Eugenol, Menthol, dan Citral. Setiap nama cocok dengan tepat satu entri katalog yang berisi SMILES.
+
+ESLint dan 83 tes Jest pada tujuh rangkaian lulus. APK lokal ARM64 berhasil dibangun dengan ID `com.essenza.lab` dan SHA-256 `9A89EE0775514F69A628C109272AE4B6ACF0E70FAA6BB494C522DDBD8354FC4C`. Build ini belum dipasang atau diperiksa langsung di HP.
+
+## Verifikasi nama umum dan CAS (23 November 2026)
+
+Katalog menampilkan nama umum yang sudah tersedia pada entri yang sama. Alias Stilbene menjadi judul untuk CID 11502, dengan nama asli tetap terlihat. Katalog dasar, SMILES, dan layanan prediksi tidak berubah.
+
+Metadata CAS berasal dari stimulus GoodScents, Leffingwell, dan Arctander yang ditautkan melalui provenans dataset beku. Generator memeriksa checksum, identitas struktur, dan konflik pada audit sumber. Sebanyak 4.431 dari 6.686 entri memiliki satu nomor CAS yang lolos dan dapat dicari. Contoh Vanillin tampil sebagai CID 1183 dan CAS 121-33-5. Regenerasi metadata menghasilkan berkas identik.
+
+ESLint dan 85 tes Jest pada tujuh rangkaian lulus, termasuk pencarian CAS dan kesesuaian struktur yang dikirim untuk prediksi. APK `com.essenza.lab` ARM64 dengan SHA-256 `D564EBE3739C9A463F853C1A50C3A9048A93A72702D1E6103858276FEB82C5AE` memuat tampilan dan metadata CAS. Build ini belum diperiksa langsung di HP.
+
+## Verifikasi senyawa tambahan di luar dataset (23 November 2026)
+
+Katalog aplikasi memprioritaskan empat struktur tambahan dengan tanda **Di luar dataset**. Asal identitas Velberry, Hydrofleur, Mevanyl, dan Petalia dicatat di [berkas katalog tambahan](../src/assets/catalog/external-compounds.json). Hydrofleur memakai representasi yang stereokimianya belum ditentukan di sumber. CID Petalia belum terverifikasi.
+
+RDKit memeriksa setiap tambahan sebagai satu molekul terhubung dan mengonfirmasi nol kecocokan konektivitas tanpa stereokimia terhadap seluruh 6.686 entri beku. Hash `records.csv` cocok dengan manifest dan pasangan ID–SMILES asli tetap identik. Keterangan eksploratif di layar hasil menggunakan SMILES kanonik dari API sehingga status juga dapat ditampilkan saat hasil dibuka dari Riwayat.
+
+Keempat permintaan `POST /predict` ke API lokal mengembalikan 109 skor dari LightGBM D v7 dengan 2.056 fitur dan threshold 0,5. Tes ini memeriksa inferensi dan kontrak keluaran. Pengukuran akurasi eksternal memerlukan label pembanding independen.
+
+ESLint dan 86 tes Jest pada tujuh rangkaian lulus. APK lokal ARM64 `com.essenza.lab` berhasil dibuat dengan SHA-256 `245EEF75A101DD115E39F0C9B234DF3BA9AF708976A05A21D48C18A8A7DA6F23`. Build ini belum diperiksa langsung di HP.
+
+## Perluasan daftar senyawa di luar dataset (23 November 2026)
+
+Sebanyak 54 struktur ditambahkan pada daftar aplikasi. Sumbernya mencakup 50 struktur dari rekaman PubChem yang ditautkan ke IFRA Transparency List dan empat senyawa pewangi Givaudan dari Annex 7.5 laporan OECD ENV/CBC/MONO(2021)9. Pemilihan menyaring kandidat dengan peran fungsional yang tampak, termasuk pelarut, pewarna, polimer, dan campuran. Tautan sumber setiap entri tersedia di [katalog tambahan](../src/assets/catalog/external-compounds.json). Setelah empat entri awal dihitung, katalog berisi 58 struktur tambahan dan 6.744 pilihan total. Nomor CAS ditampilkan untuk 54 entri tambahan yang mempunyai pemetaan tercatat.
+
+Pemeriksaan RDKit dan konektivitas InChI membandingkan 58 entri tambahan dengan 6.686 struktur yang dipakai penelitian. Tidak ditemukan duplikat terhadap katalog penelitian atau di antara entri tambahan. Hash katalog dasar dan hash berkas `records.csv` diverifikasi. Seluruh 58 permintaan `POST /predict` mengembalikan 109 skor valid dengan label, skema fitur, dan identitas LightGBM D v7 sesuai manifest. Skor tersebut berasal dari inferensi dan tidak disimpan ke katalog.
+
+ESLint dan 86 tes Jest pada tujuh rangkaian lulus. Build pertama menganggap bundel tetap mutakhir setelah hanya JSON berubah. Setelah direktori JSON katalog ditetapkan sebagai masukan Gradle, bundel dibuat ulang. Paket Android lokal ARM64 `com.essenza.lab` memuat semua 58 ID dan memiliki SHA-256 `030AFA9E5716E482695C499B832788328A6F1D021763F93D8463F18BFC5264CB`. Build ini belum diperiksa langsung di HP.

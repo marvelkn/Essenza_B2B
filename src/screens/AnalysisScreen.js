@@ -8,8 +8,9 @@ import {
   View,
 } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { COMPOUNDS, CompoundPicker } from '../components/CompoundPicker';
+import { CompoundPicker } from '../components/CompoundPicker';
 import { inputError } from '../domain/analysis';
+import { compounds, isOutsideDataset } from '../domain/catalog';
 import { v7PredictionService } from '../services/v7Prediction';
 import { useFavorites } from '../storage/FavoritesProvider';
 import { useLab } from '../storage/LabProvider';
@@ -264,9 +265,11 @@ export function AnalysisScreen({ service = v7PredictionService }) {
               disabled={busy}
             />
             <Text style={s.small}>
-              Pilih dari {COMPOUNDS.length.toLocaleString('id-ID')} senyawa yang tersedia.
-              Kolom pencarian di dalam daftar hanya menyaring pilihan.
+              Pilih dari {compounds.length.toLocaleString('id-ID')} senyawa.
             </Text>
+            {isOutsideDataset(selectedCompound?.smiles) && <Notice>
+              Struktur ini di luar dataset penelitian. Hasil prediksinya bersifat eksploratif.
+            </Notice>}
           </View> : inputMode === 'translator' ? <View style={styles.fieldGroup}>
             <Text style={s.label}>Nama umum atau rumus kimia</Text>
             <TextInput

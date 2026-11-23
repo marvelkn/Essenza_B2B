@@ -1,6 +1,6 @@
 # Essenza Lab — analisis aroma satu senyawa untuk B2B
 
-Essenza membantu UMKM/peracik parfum mengeksplorasi **label aroma satu molekul**. Aplikasi Android menyediakan katalog **6.686 senyawa bernama**, pencarian nama/rumus dengan konfirmasi struktur, dan input SMILES lanjutan. **RDKit dan 109 model LightGBM D asli berjalan pada komputer lokal**; HP mengirim struktur dan menerima skor melalui API lokal lewat USB.
+Essenza membantu UMKM/peracik parfum mengeksplorasi **label aroma satu molekul**. Aplikasi Android menyediakan katalog **6.686 senyawa penelitian** dengan pilihan tambahan dari luar dataset, pencarian nama/rumus dengan konfirmasi struktur, dan input SMILES lanjutan. **RDKit dan 109 model LightGBM D asli berjalan pada komputer lokal**; HP mengirim struktur dan menerima skor melalui API lokal lewat USB.
 
 ```text
 Android: pilih satu struktur

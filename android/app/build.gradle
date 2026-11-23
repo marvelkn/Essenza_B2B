@@ -139,6 +139,14 @@ dependencies {
     }
 }
 
+// React Native's bundle task tracks JS/TS sources; Metro also imports the catalog JSON.
+def catalogProjectRoot = file(providers.gradleProperty("essenzaProjectRoot").getOrElse("../.."))
+tasks.withType(com.facebook.react.tasks.BundleHermesCTask).configureEach {
+    inputs.files(fileTree(dir: "${catalogProjectRoot}/src/assets/catalog", include: "*.json"))
+        .withPropertyName("essenzaCatalog")
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+}
+
 // React Native computes CLI paths relative to root; keep Metro outputs on that drive too.
 afterEvaluate {
     if (providers.gradleProperty("essenzaProjectRoot").isPresent()) {

@@ -9,6 +9,7 @@ import { HISTORY_KEY } from '../src/storage/history';
 import { TUTORIAL_KEY } from '../src/tutorial/TutorialProvider';
 import { FAVORITES_KEY } from '../src/storage/favorites';
 import catalog from '../src/assets/catalog/compounds.json';
+import additionalCompounds from '../src/assets/catalog/external-compounds.json';
 import { v7PredictionService } from '../src/services/v7Prediction';
 jest.mock('../src/services/v7Prediction', () => ({
   v7PredictionService: { predict: jest.fn(), resolve: jest.fn() },
@@ -136,18 +137,88 @@ test('running ML twice records two separate history entries', async () => {
   expect(saved.records.map(item => item.id)).toEqual(['run-2', 'run-1']);
   expect(v7PredictionService.predict).toHaveBeenCalledTimes(2);
 });
-test('catalog search selects a known structure and sends it for prediction', async () => {
+test.each(['Vanillin', 'CAS: 121-33-5'])('catalog search for %s selects the same structure', async query => {
   await press('Pilih senyawa dari katalog');
   await act(async () => {
     tree.root.findAllByType(TextInput)
       .find(node => node.props.accessibilityLabel === 'Cari senyawa dalam katalog')
-      .props.onChangeText('Vanillin');
+      .props.onChangeText(query);
   });
+  expect(tree.root.findAllByType(Text).some(
+    node => node.props.children === 'CID 1183 · CAS 121-33-5',
+  )).toBe(true);
   await press('Pilih Vanillin, CID 1183');
   await act(async () => button('Prediksi aroma').props.onPress());
   expect(v7PredictionService.predict).toHaveBeenCalledWith(expect.objectContaining({
     smiles: catalog.compounds.find(item => item.name === 'Vanillin').smiles,
     catalogName: 'Vanillin',
+  }));
+});
+
+test('catalog shows a common name and preserves the original selection', async () => {
+  const compound = catalog.compounds.find(item => item.cid === '11502');
+  await press('Pilih senyawa dari katalog');
+  await act(async () => {
+    tree.root.findAllByType(TextInput)
+      .find(node => node.props.accessibilityLabel === 'Cari senyawa dalam katalog')
+      .props.onChangeText('Stilbene');
+  });
+  expect(tree.root.findAllByType(Text).some(node => node.props.children === compound.name)).toBe(true);
+
+  await press('Pilih Stilbene, CID 11502');
+  expect(tree.root.findAllByType(Text).some(node => node.props.children === 'Stilbene')).toBe(true);
+  await act(async () => { await button('Prediksi aroma').props.onPress(); });
+  expect(v7PredictionService.predict).toHaveBeenCalledWith(expect.objectContaining({
+    smiles: compound.smiles,
+    catalogName: compound.name,
+  }));
+});
+
+test('an outside-dataset catalog choice is sent to the model and marked in the result', async () => {
+  const compound = additionalCompounds.find(item => item.name === 'Velberry');
+  await press('Pilih senyawa dari katalog');
+  await act(async () => {
+    tree.root.findAllByType(TextInput)
+      .find(node => node.props.accessibilityLabel === 'Cari senyawa dalam katalog')
+      .props.onChangeText(compound.cas);
+  });
+  const selectionLabel = `Pilih ${compound.name}${compound.cid ? `, CID ${compound.cid}` : ''}`;
+  await press(selectionLabel);
+  expect(tree.root.findAllByType(Text).some(
+    node => node.props.children === 'Di luar dataset',
+  )).toBe(true);
+  await act(async () => { await button('Prediksi aroma').props.onPress(); });
+  expect(v7PredictionService.predict).toHaveBeenCalledWith(expect.objectContaining({
+    smiles: compound.smiles,
+    catalogName: compound.name,
+  }));
+  expect(tree.root.findAllByType(Text).some(
+    node => node.props.children === 'Struktur ini di luar dataset penelitian. Skor ini adalah prediksi eksploratif.',
+  )).toBe(true);
+});
+
+test('catalog guide and search reset preserve the selected signed compound', async () => {
+  await press('Pilih senyawa dari katalog');
+  await press('Arti tanda pada nama');
+  const headings = tree.root.findAllByType(Text).map(node => node.props.children);
+  expect(headings).toEqual(expect.arrayContaining([
+    '(+) dan (−) · Rotasi optik',
+    '(2E) dan (2Z) · Posisi gugus di ikatan rangkap',
+  ]));
+
+  const search = () => tree.root.findAllByType(TextInput)
+    .find(node => node.props.accessibilityLabel === 'Cari senyawa dalam katalog');
+  await act(async () => search().props.onChangeText('vanillin'));
+  await press('Hapus pencarian');
+  expect(search().props.value).toBe('');
+
+  const compound = catalog.compounds.find(item => item.name === '(+)-alpha-pinene');
+  await act(async () => search().props.onChangeText(compound.name));
+  await press(`Pilih ${compound.name}, CID ${compound.cid}`);
+  await act(async () => { await button('Prediksi aroma').props.onPress(); });
+  expect(v7PredictionService.predict).toHaveBeenCalledWith(expect.objectContaining({
+    smiles: compound.smiles,
+    catalogName: compound.name,
   }));
 });
 
